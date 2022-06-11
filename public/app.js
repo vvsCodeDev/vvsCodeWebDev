@@ -2,7 +2,7 @@
 // import dotenv from 'dotenv';
 // dotenv.config();
 require('dotenv').config();
-
+console.log(process.env);
 
 const firebaseConfig = {
     apiKey: process.env.API_KEY,
@@ -17,10 +17,10 @@ const firebaseConfig = {
 firebse.initializeApp(firebaseConfig);
 
 
-const functions = require('firebase-functions');
+// const functions = require('firebase-functions');
 
-const config =  functions.config();
-const firebaseConfig = config.firebase;
+// const config =  functions.config();
+// const firebaseConfig = config.firebase;
 
 //Reference contactInfo collections
 let contactInfo = firebase.database().ref('info');
