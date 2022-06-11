@@ -1,4 +1,6 @@
-require('dotenv').config();
+//require('dotenv').config();
+import dotenv from 'dotenv';
+dotenv.config();
 
 const firebaseConfig = {
     apiKey: process.env.API_KEY,
