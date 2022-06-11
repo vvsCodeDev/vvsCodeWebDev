@@ -1,0 +1,25 @@
+{
+  "name": "vvscodeweb",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app_old.js",
+  "dependencies": {
+    "dotenv": "^16.0.1",
+    "firebase": "^9.8.2",
+    "package.json": "^2.0.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vvsCodeDev/vvsCodeWebDev.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vvsCodeDev/vvsCodeWebDev/issues"
+  },
+  "homepage": "https://github.com/vvsCodeDev/vvsCodeWebDev#readme"
+}
