@@ -1,15 +1,5 @@
 require('dotenv').config();
 
-// Import the functions you need from the SDKs you need
-//import { initializeApp } from "/firebase/app";
-//import { getAnalytics } from "/firebase/analytics";
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-app.js";
-import { getFirestore, doc, getDoc, getDocs, collection } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-firestore.js";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
     apiKey: process.env.API_KEY,
     authDomain: process.env.AUTH_DOMAIN,
@@ -20,28 +10,36 @@ const firebaseConfig = {
     measurementId: process.env.MEASUREMENT_ID
 };
 
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+firebse.initializeApp(firebaseConfig);
 
 //Reference contactInfo collections
-let contactInfo = firebase.database().ref("info");
+let contactInfo = firebase.database().ref('info');
 
 //Listen for submit
-document.querySelector("contact-form").addEventListener("submit", submitForm);
+document.getElementById("contact-form").addEventListener("submit", submitForm);
 
 function submitForm(e) {
     e.preventDefault();
     console.log("email form submitted");
 
-    //get input values
-    // let name = document.querySelector(".name").value;
-    // let email = document.querySelector(".email").value;
-    // let subject = document.querySelector(".subject").value;
-    // let message = document.querySelector(".message").value;
+    get input values
+    let name = getInputVal('name');
+    let email = getInputVal('email');
+    let subject = getInputVal('subject');
+    let message = getInputVal('message');
 
-    // saveContactInfo(name, email, subject, message);
+    saveContactInfo(name, email, subject, message);
+
+    // Show alert
+    document.querySelector('.alert').style.display = 'block';
+
+    // Hide alert after 3 seconds
+    setTimeout(function(){
+        document.querySelector('.alert').style.display = 'none';
+    },3000);
+
+    // Clear form
+    document.getElementById('contactForm').reset();
 }
 
 
@@ -53,6 +51,6 @@ function saveContactInfo(name, email, subject, message) {
         name: name,
         email: email,
         subject: subject,
-        message: message,
+        message: message
     });
 }
