@@ -22,7 +22,7 @@ document.getElementById("contact-form").addEventListener("submit", submitForm);
 
 function submitForm(e) {
     e.preventDefault();
-    console.log("email form submitted");
+    //console.log("email form submitted");
 
     //get input values
     let name = getInputVal('name');
