@@ -8,7 +8,10 @@
     "firebase": "^9.8.2",
     "package.json": "^2.0.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "dotenv-webpack": "^7.1.0",
+    "webpack": "^5.73.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
