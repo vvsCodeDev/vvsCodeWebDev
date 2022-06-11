@@ -16,12 +16,6 @@ const firebaseConfig = {
 
 firebse.initializeApp(firebaseConfig);
 
-
-// const functions = require('firebase-functions');
-
-// const config =  functions.config();
-// const firebaseConfig = config.firebase;
-
 //Reference contactInfo collections
 let contactInfo = firebase.database().ref('info');
 
