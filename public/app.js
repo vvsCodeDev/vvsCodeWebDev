@@ -22,7 +22,7 @@ function submitForm(e) {
     e.preventDefault();
     console.log("email form submitted");
 
-    get input values
+    //get input values
     let name = getInputVal('name');
     let email = getInputVal('email');
     let subject = getInputVal('subject');
