@@ -1,5 +1,5 @@
 
-import { initializeApp } from 'fiebase/app';
+import { initializeApp } from 'firebase/app';
 
 // require('dotenv').config();
 // console.log(process.env);
