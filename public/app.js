@@ -1,4 +1,6 @@
 
+import { initializeApp } from 'fiebase/app';
+
 // require('dotenv').config();
 // console.log(process.env);
 
