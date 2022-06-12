@@ -1,31 +1,25 @@
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
 
-//import { initializeApp } from 'firebase/app';
-
-// require('dotenv').config();
-// console.log(process.env);
-
-// const firebaseConfig = {
-//     apiKey: process.env.API_KEY,
-//     authDomain: process.env.AUTH_DOMAIN,
-//     projectId: process.env.PROJECT_ID,
-//     storageBucket: process.env.STORAGE_BUCKET,
-//     messagingSenderId: process.env.MESSAGING_SENDERID,
-//     appId: process.env.APP_ID,
-//     measurementId: process.env.MEASUREMENT_ID
-// };
-
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-    apiKey: 'AIzaSyDeCSSaaqBzGY7fADL8ndGAVzeJFmxAK6k',
-    authDomain: 'vvscodeweb-c0453.firebaseapp.com',
-    projectId: 'vvscodeweb-c0453',
-    storageBucket: 'vvscodeweb-c0453.appspot.com',
-    messagingSenderId: '1041652245769',
-    appId: '1:1041652245769:web:9de367b7e3a9f968b55fd8',
-    measurementId: 'G-ZHN3DBQS3J'
+  apiKey: "AIzaSyDcSNvPWRrz3uxqandnEeIfG8NzyEd6NMA",
+  authDomain: "vcwi-115c6.firebaseapp.com",
+  databaseURL: "https://vcwi-115c6-default-rtdb.firebaseio.com",
+  projectId: "vcwi-115c6",
+  storageBucket: "vcwi-115c6.appspot.com",
+  messagingSenderId: "625669501307",
+  appId: "1:625669501307:web:0eb55bf4cb881610b20dde",
+  measurementId: "G-H6M403YJWG"
 };
 
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 
 //Reference contactInfo collections
 let contactInfo = firebase.database().ref('info');
