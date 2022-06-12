@@ -18,7 +18,7 @@ firebase.initializeApp(firebaseConfig);
 let contactInfo = firebase.database().ref('info');
 
 //Listen for submit
-document.getElementById("contact-form").addEventListener("submit", submitForm);
+document.getElementById('contact-form').addEventListener('submit', submitForm);
 
 function submitForm(e) {
     e.preventDefault();
