@@ -1,5 +1,5 @@
 
-import { initializeApp } from 'firebase/app';
+//import { initializeApp } from 'firebase/app';
 
 // require('dotenv').config();
 // console.log(process.env);
@@ -25,7 +25,7 @@ const firebaseConfig = {
 };
 
 
-firebse.initializeApp(firebaseConfig);
+initializeApp(firebaseConfig);
 
 //Reference contactInfo collections
 let contactInfo = firebase.database().ref('info');
