@@ -24,8 +24,8 @@ const firebaseConfig = {
     measurementId: 'G-ZHN3DBQS3J'
 };
 
-
-initializeApp(firebaseConfig);
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
 
 //Reference contactInfo collections
 let contactInfo = firebase.database().ref('info');
