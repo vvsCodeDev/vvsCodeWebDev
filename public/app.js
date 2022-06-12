@@ -1,5 +1,19 @@
 
 
+const firebaseConfig = {
+    apiKey: "AIzaSyDcSNvPWRrz3uxqandnEeIfG8NzyEd6NMA",
+    authDomain: "vcwi-115c6.firebaseapp.com",
+    databaseURL: "https://vcwi-115c6-default-rtdb.firebaseio.com",
+    projectId: "vcwi-115c6",
+    storageBucket: "vcwi-115c6.appspot.com",
+    messagingSenderId: "625669501307",
+    appId: "1:625669501307:web:0eb55bf4cb881610b20dde",
+    measurementId: "G-H6M403YJWG"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+
 //Reference contactInfo collections
 let contactInfo = firebase.database().ref('info');
 
