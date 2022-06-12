@@ -4,15 +4,26 @@
 require('dotenv').config();
 console.log(process.env);
 
+// const firebaseConfig = {
+//     apiKey: process.env.API_KEY,
+//     authDomain: process.env.AUTH_DOMAIN,
+//     projectId: process.env.PROJECT_ID,
+//     storageBucket: process.env.STORAGE_BUCKET,
+//     messagingSenderId: process.env.MESSAGING_SENDERID,
+//     appId: process.env.APP_ID,
+//     measurementId: process.env.MEASUREMENT_ID
+// };
+
 const firebaseConfig = {
-    apiKey: process.env.API_KEY,
-    authDomain: process.env.AUTH_DOMAIN,
-    projectId: process.env.PROJECT_ID,
-    storageBucket: process.env.STORAGE_BUCKET,
-    messagingSenderId: process.env.MESSAGING_SENDERID,
-    appId: process.env.APP_ID,
-    measurementId: process.env.MEASUREMENT_ID
+    apiKey: 'AIzaSyDeCSSaaqBzGY7fADL8ndGAVzeJFmxAK6k',
+    authDomain: 'vvscodeweb-c0453.firebaseapp.com',
+    projectId: 'vvscodeweb-c0453',
+    storageBucket: 'vvscodeweb-c0453.appspot.com',
+    messagingSenderId: '1041652245769',
+    appId: '1:1041652245769:web:9de367b7e3a9f968b55fd8',
+    measurementId: 'G-ZHN3DBQS3J'
 };
+
 
 firebse.initializeApp(firebaseConfig);
 
