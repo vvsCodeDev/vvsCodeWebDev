@@ -41,8 +41,13 @@ function submitForm(e) {
     },3000);
 
     // Clear form
-    document.getElementById('contactForm').reset();
+    document.getElementById('contact-form').reset();
 }
+
+// Function to get form value
+function getInputVal(id){
+    return document.getElementById(id).value;
+  }
 
 
 //Save info to Firebase
