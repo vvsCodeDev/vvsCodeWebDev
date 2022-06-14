@@ -42,7 +42,7 @@ function submitForm(e) {
     },3000);
 
     // Clear form
-    document.getElementById('contact-form').reset();
+    document.getElementById('contactForm').reset();
 }
 
 // Function to get form value
