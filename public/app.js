@@ -25,24 +25,24 @@ function submitForm(e) {
     e.preventDefault();
     console.log("email form submitted");
 
-    // //get input values
-    // let name = getInputVal('name');
-    // let email = getInputVal('email');
-    // let subject = getInputVal('subject');
-    // let message = getInputVal('message');
+    //get input values
+    let name = getInputVal('name');
+    let email = getInputVal('email');
+    let subject = getInputVal('subject');
+    let message = getInputVal('message');
 
-    // saveContactInfo(name, email, subject, message);
+    saveContactInfo(name, email, subject, message);
 
-    // // Show alert
-    // document.querySelector('.alert').style.display = 'block';
+    // Show alert
+    document.querySelector('.alert').style.display = 'block';
 
-    // // Hide alert after 3 seconds
-    // setTimeout(function(){
-    //     document.querySelector('.alert').style.display = 'none';
-    // },3000);
+    // Hide alert after 3 seconds
+    setTimeout(function(){
+        document.querySelector('.alert').style.display = 'none';
+    },3000);
 
-    // // Clear form
-    // document.getElementById('contact-form').reset();
+    // Clear form
+    document.getElementById('contact-form').reset();
 }
 
 // Function to get form value
