@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
+<title>vvsCode: Flawless Apps</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="X-UA-Compatible" content="ie=edge">
-<title>vvsCode: Flawless Apps</title>
+<!-- <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> -->
 <link rel="stylesheet" href="w3.css">
 <link rel="icon" href="favicon.ico" />
 </head>
-
 <body>
+
 <!-- Navbar (sit on top) -->
 <div class="w3-top">
   <div class="w3-bar w3-white w3-wide w3-padding w3-card">
@@ -107,51 +107,29 @@
     <h2 class="w3-border-bottom w3-border-light-grey w3-padding-16">Contact</h2>
     <p>Lets get in touch and talk about your next project</p>
     <div>
-      <!-- <div class="alert">Your message has been sent</div>
-        <form id="contactForm">
-          <p>
-            <label>Name</label>
-            <input type="text" name="name" id="name" required>
-          </p>
-          <p>
-            <label>Email Address</label>
-            <input type="email" name="email" id="email" required>
-          </p>
-          <p>
-            <label>Phone Number</label>
-            <input type="text" name="phone" id="phone">
-          </p>
-          <p class="full">
-            <label>Message to vvsCode</label>
-            <textarea name="message" rows="5" id="message"></textarea>
-          </p>
-          <p class="full">
-            <button type="submit">Submit</button>
-          </p>
-        </form>
-      </div> -->
-      <div>
-        <div  class="alert">Your message has been sent</div>
-          <form class="contactForm">
-            <input class="input-form" type="text" placeholder="Name" required name="name" id="name">
-            <input class="input-form" type="text" placeholder="Email" required name="email" id="email">
-            <input class="input-form" type="text" placeholder="Subject" required name="subject" id="subject">
-            <input class="input-form" type="text" placeholder="Message" required name="message" id="message">
-            <button class="w3-button w3-black w3-section" type="submit">
-              <i class="fa fa-paper-plane"></i> SEND MESSAGE
-            </button>
-          </form> 
-      </div>
+      <form class="contact-form">
+        <input class="input-form" type="text" placeholder="Name" required name="name" id="name">
+        <input class="input-form" type="text" placeholder="Email" required name="email" id="email">
+        <input class="input-form" type="text" placeholder="Subject" required name="subject" id="subject">
+        <input class="input-form" type="text" placeholder="Message" required name="message" id="message">
+
+      </form> 
     </div>
-  <div>
-  
-  <!-- Image of location/map -->
-  <div class="w3-container">
-    <!-- <img src="/images/map.jpeg" class="w3-image" style="width:100%"> -->
-    <img src="/images/westcoast.jpg" class="w3-image" style="width:100%">
+    <div>
+        <button class="w3-button w3-black w3-section" type="submit">
+          <i class="fa fa-paper-plane"></i> SEND MESSAGE
+        </button>
+    </div>
   </div>
 
-  <!-- End page content -->
+  
+<!-- Image of location/map -->
+<div class="w3-container">
+  <!-- <img src="/images/map.jpeg" class="w3-image" style="width:100%"> -->
+  <img src="/images/westcoast.jpg" class="w3-image" style="width:100%">
+</div>
+
+<!-- End page content -->
 </div>
 
 
@@ -166,7 +144,7 @@
     </div>
   </div></footer>
 
-<script src="https://www.gstatic.com/firebasejs/4.3.0/firebase.js"></script>
-<script src="app.js" defer></script>
+
+<script type="module" src="/app.js"></script>
 </body>
 </html>
