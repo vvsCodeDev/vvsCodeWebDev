@@ -1,14 +1,14 @@
 
 
 const firebaseConfig = {
-    apiKey: "AIzaSyDcSNvPWRrz3uxqandnEeIfG8NzyEd6NMA",
-    authDomain: "vcwi-115c6.firebaseapp.com",
-    databaseURL: "https://vcwi-115c6-default-rtdb.firebaseio.com",
-    projectId: "vcwi-115c6",
-    storageBucket: "vcwi-115c6.appspot.com",
-    messagingSenderId: "625669501307",
-    appId: "1:625669501307:web:0eb55bf4cb881610b20dde",
-    measurementId: "G-H6M403YJWG"
+    apiKey: "AIzaSyDeCSSaaqBzGY7fADL8ndGAVzeJFmxAK6k",
+    authDomain: "vvscodeweb-c0453.firebaseapp.com",
+    databaseURL: "https://vvscodeweb-c0453-default-rtdb.firebaseio.com/",
+    projectId: "vvscodeweb-c0453",
+    storageBucket: "vvscodeweb-c0453.appspot.com",
+    messagingSenderId: "1041652245769",
+    appId: "1:1041652245769:web:9de367b7e3a9f968b55fd8",
+    measurementId: "G-ZHN3DBQS3J"
 };
 
 // Initialize Firebase
