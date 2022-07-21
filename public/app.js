@@ -30,6 +30,8 @@ function submitForm(e) {
     let email = getInputVal('email');
     let subject = getInputVal('subject');
     let message = getInputVal('message');
+    let time = firebase.database.Timestamp.fromDate(new Date());
+
 
     saveContactInfo(name, email, subject, message);
 
