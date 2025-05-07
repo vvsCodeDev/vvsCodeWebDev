@@ -25,5 +25,10 @@
   "bugs": {
     "url": "https://github.com/vvsCodeDev/vvsCodeWebDev/issues"
   },
-  "homepage": "https://github.com/vvsCodeDev/vvsCodeWebDev#readme"
+  "homepage": "https://github.com/vvsCodeDev/vvsCodeWebDev#readme",
+    "scripts": {
+      "start": "node server.js",
+      "build": "react-scripts build"
+    }
+  
 }
