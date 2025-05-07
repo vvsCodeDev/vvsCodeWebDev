@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
+<title>vvsCode: Flawless Apps</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="X-UA-Compatible" content="ie=edge">
-<title>vvsCode: Flawless Apps</title>
+<!-- <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> -->
 <link rel="stylesheet" href="w3.css">
 <link rel="icon" href="favicon.ico" />
 </head>
-
 <body>
+
 <!-- Navbar (sit on top) -->
 <div class="w3-top">
   <div class="w3-bar w3-white w3-wide w3-padding w3-card">
@@ -17,7 +17,6 @@
     <!-- Float links to the right. Hide them on small screens -->
     <div class="w3-right w3-hide-small">
       <a href="#services" class="w3-bar-item w3-button">Services</a>
-      <a href="#tweets" class="w3-bar-item w3-button">Tweets</a>
       <a href="#about" class="w3-bar-item w3-button">About</a>
       <a href="#contact" class="w3-bar-item w3-button">Contact</a>
     </div>
@@ -33,6 +32,7 @@
 </header>
 
 <!-- Page content -->
+<!-- <div class="w3-content w3-padding w3-center" style="max-width: 1600px;"> -->
 <div class="w3-center" style="max-width: 1600px;">
 
   <!-- Services Section -->
@@ -76,64 +76,29 @@
     </div>
     <div style="display: flex; flex-direction: column; padding: 10px;">
       <div class="w3-display-container">
-        <div class="w3-display-topleft w3-black w3-padding">Product Management</div>
-        <img src="/images/project.jpg" alt="Product Management" style="width: 300px;">
+        <div class="w3-display-topleft w3-black w3-padding">Product Ownership</div>
+        <img src="/images/project.jpg" alt="Product Ownership" style="width: 300px;">
       </div>
     </div>
   </div>  
 
-  <!-- Tweets Section -->
-  <div class="w3-container w3-padding-32 w3-center" id="tweets" style="text-align:center">
-    <h2 class="w3-border-bottom w3-border-light-grey w3-padding-16">Tweets</h2>
-    <a class="twitter-timeline" data-width="450" data-height="600" href="https://twitter.com/vvsCodedotnet" data-chrome=" noheader nofooter noborders transparent"></a> 
-    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-  
-  
-  
-     <!--
-  <a class="twitter-timeline" 
-     data-width="450" 
-     data-height="600" 
-     href="https://twitter.com/vvsCodedotnet?ref_src=twsrc%5Etfw" 
-     data-chrome="noheader nofooter noborders transparent">
-     Tweets by @vvsCodedotnet
-  </a>  
-  <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>  
-
-  <a class="twitter-timeline" href="https://twitter.com/TwitterDev" 
-   data-width="300" data-height="500">
-   Tweets by @TwitterDev
-</a>
-<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-
-    -->
-
-  </div>
 
 
   <!-- About Section -->
-  <div class="w3-container w3-padding-32 w3-center" id="about" style="text-align:center">
+  <div class="w3-center" id="about">
     <h2 class="w3-border-bottom w3-border-light-grey w3-padding-16">About</h2>
-    <p style="width:80%; margin: auto; padding-bottom: 10px;"> vvsCode is a Mobile & Web App development firm focused on delivering high-impact robust Android & iOS apps. Our apps use a Google Cloud Platform backend for customer data and authentication. 
+    <p style="width:80%; margin: auto; padding-bottom: 10px;">vvsCode is a Mobile App development firm focused on delivering high-impact robust Android & iOS apps. Our apps use a Google Cloud Platform backend for customer data and authentication. 
       We use the Scrum Agile development methodology along with Kanban to promote a sense of clarity among the developers that promotes job satisfaction and helps avoid costly churn. Utilizing the tools of 
-      Product Management such as Jira and Confluence, vvsCode is able to get everyone onboard with a single vision and move forward methodically to deploy on time and under budget
+      product ownership such as Jira and Confluence, vvsCode is able to get everyone onboard with a single vision and move forward methodically to deploy on time and under budget
     </p>
   </div>
 
   <div class="w3-center">
     <div style="display: flex; flex-direction: column; align-items: center;">
-      <img src="images/jrc_about.jpg" alt="Justin" style="width:120px">
+      <img src="/images/justin_about.jpeg" alt="Justin" style="width:120px">
       <h3>Justin Calhoun</h3>
       <p style="color:grey;">Founder</p>
-      <p style="width: 70%;">Throughout his 20 year career Justin has served as Technical Product Manager and Developer of cross-platform Software as a Service (SaaS) mobile & web apps for Android and iOS</p>
-    </div>
-  </div>
-
-  <div class="w3-center">
-    <div style="display: flex; flex-direction: column; align-items: center;">
-      <img src="images/jrc_about.jpg" alt="Justin" style="width:120px">
-      <h3>TEST 123</h3>
-      <p style="color:grey;">TEST 1/2/3</p>
+      <p style="width: 70%;">Throughout his 20 year career Justin has served as Technical Product Owner and Developer of cross-platform Software as a Service (SaaS) mobile apps for Android & iOS</p>
     </div>
   </div>
 
@@ -142,29 +107,29 @@
     <h2 class="w3-border-bottom w3-border-light-grey w3-padding-16">Contact</h2>
     <p>Lets get in touch and talk about your next project</p>
     <div>
-      <div>
-        <div  class="alert" style="color: green;">Your message has been sent</div>
-          <form id="contactForm">
-            <input class="input-form" type="text" placeholder="Name" required name="name" id="name">
-            <input class="input-form" type="text" placeholder="Email" required name="email" id="email">
-            <input class="input-form" type="text" placeholder="Subject" required name="subject" id="subject">
-            <textarea class="input-form" type="text" placeholder="Message" required name="message" id="message" rows="5"></textarea>
-            <div>
-              <button class="w3-button w3-black w3-section" type="submit">
-              <i class="fa fa-paper-plane"></i> SEND MESSAGE
-            </button>
-            </div>
-          </form> 
-      </div>
+      <form class="contact-form">
+        <input class="input-form" type="text" placeholder="Name" required name="name" id="name">
+        <input class="input-form" type="text" placeholder="Email" required name="email" id="email">
+        <input class="input-form" type="text" placeholder="Subject" required name="subject" id="subject">
+        <input class="input-form" type="text" placeholder="Message" required name="message" id="message">
+
+      </form> 
     </div>
-  <div>
-  
-  <!-- Image of location/map -->
-  <div class="w3-container">
-    <img src="/images/westcoast.jpg" class="w3-image" style="width:100%">
+    <div>
+        <button class="w3-button w3-black w3-section" type="submit">
+          <i class="fa fa-paper-plane"></i> SEND MESSAGE
+        </button>
+    </div>
   </div>
 
-  <!-- End page content -->
+  
+<!-- Image of location/map -->
+<div class="w3-container">
+  <!-- <img src="/images/map.jpeg" class="w3-image" style="width:100%"> -->
+  <img src="/images/westcoast.jpg" class="w3-image" style="width:100%">
+</div>
+
+<!-- End page content -->
 </div>
 
 
@@ -179,7 +144,7 @@
     </div>
   </div></footer>
 
-<script src="https://www.gstatic.com/firebasejs/4.3.0/firebase.js"></script>
-<script src="app.js" defer></script>
+
+<script type="module" src="/app.js"></script>
 </body>
 </html>
