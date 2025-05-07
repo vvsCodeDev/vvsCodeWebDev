@@ -29,5 +29,5 @@
     "url": "https://github.com/vvsCodeDev/vvsCodeWebDev/issues"
   },
   "homepage": "https://github.com/vvsCodeDev/vvsCodeWebDev#readme",
-  "main": "index.js"
+  "main": "app.js"
 }
