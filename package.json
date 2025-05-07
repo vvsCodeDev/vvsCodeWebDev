@@ -2,7 +2,7 @@
   "name": "vvscodeweb",
   "version": "1.0.0",
   "description": "",
-  "main": "app_old.js",
+  "main": "app.js",
   "dependencies": {
     "dotenv": "^16.0.1",
     "firebase": "^9.8.3",
@@ -29,5 +29,4 @@
     "url": "https://github.com/vvsCodeDev/vvsCodeWebDev/issues"
   },
   "homepage": "https://github.com/vvsCodeDev/vvsCodeWebDev#readme",
-  "main": "app.js"
 }
