@@ -1,0 +1,11 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{db}/documents {
+    match /contactMessages/{doc} {
+      // Only allow creation from the API endpoint
+      // No public reads, updates, or deletes
+      allow read, update, delete: if false;
+      allow create: if true; // This will be restricted by Firebase Auth/API key
+    }
+  }
+}

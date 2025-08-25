@@ -248,14 +248,16 @@
     <p>Lets get in touch and talk about your next project</p>
     <div>
       <div>
-        <div  class="alert" style="color: green;">Your message has been sent</div>
+        <div id="alertMessage" class="alert" style="display: none;"></div>
           <form id="contactForm">
             <input class="input-form" type="text" placeholder="Name" required name="name" id="name">
             <input class="input-form" type="text" placeholder="Email" required name="email" id="email">
             <input class="input-form" type="text" placeholder="Subject" required name="subject" id="subject">
             <textarea class="input-form" type="text" placeholder="Message" required name="message" id="message" rows="5"></textarea>
+            <!-- Honeypot field - hidden from users but visible to bots -->
+            <input type="text" name="hp" id="hp" style="display: none;" tabindex="-1" autocomplete="off">
             <div>
-              <button class="w3-button w3-black w3-section" type="submit">
+              <button class="w3-button w3-black w3-section" type="submit" id="submitBtn">
               <i class="fa fa-paper-plane"></i> SEND MESSAGE
             </button>
             </div>
