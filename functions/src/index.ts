@@ -49,7 +49,7 @@ export const contactForm = onRequest(
   {
     secrets: [ipSalt],
     cors: true,
-    region: "us-central1",
+    region: "us-west1",
   },
   async (req, res) => {
     // Only allow POST requests
@@ -128,7 +128,7 @@ export const onContactMessageCreated = onDocumentCreated(
     document: "contactMessages/{docId}",
     secrets: [sendgridApiKey, alertEmailTo, alertEmailFrom],
     retry: true,
-    region: "us-central1",
+    region: "us-west1",
   },
   async (event) => {
     const docId = event.params.docId;
