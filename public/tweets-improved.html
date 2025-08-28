@@ -204,6 +204,91 @@
   margin: auto;
 }
 
+.test-accounts {
+  margin: 20px 0;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e1e8ed;
+}
+
+.account-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 15px 0;
+}
+
+.account-btn {
+  background: #1da1f2;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.account-btn:hover {
+  background: #0d8bd9;
+  transform: translateY(-2px);
+}
+
+.test-results {
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 8px;
+  text-align: left;
+}
+
+.testing {
+  background: #fff3cd;
+  border: 1px solid #ffeaa7;
+  color: #856404;
+}
+
+.success {
+  background: #d4edda;
+  border: 1px solid #c3e6cb;
+  color: #155724;
+}
+
+.error {
+  background: #f8d7da;
+  border: 1px solid #f5c6cb;
+  color: #721c24;
+}
+
+.account-result {
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #e1e8ed;
+}
+
+.account-result .countdown-timer {
+  margin-top: 10px;
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.account-result .time-remaining {
+  font-size: 18px;
+  font-weight: bold;
+  color: #dc3545;
+  margin-bottom: 5px;
+}
+
+.account-result .reset-time {
+  font-size: 12px;
+  color: #6c757d;
+  font-style: italic;
+}
+
 .twitter-fallback {
   background: #f8f9fa;
   border: 1px solid #e1e8ed;
@@ -264,50 +349,30 @@
 <div class="main-container" style="margin: 0 auto; max-width: 1400px; text-align: center;">
 <div class="w3-center" style="max-width: 1600px;">
 
-  <!-- Tweets Section -->
-  <div class="w3-container w3-padding-32 w3-center" id="tweets" style="text-align:center">
-    <h2 class="w3-border-bottom w3-border-light-grey w3-padding-16">Latest Tweets</h2>
-    <p style="max-width: 600px; margin: auto; padding-bottom: 20px;">
-      Stay updated with the latest from vvsCode. Follow us on Twitter for insights, updates, and tech news.
-    </p>
+  <div class="container">
+    <h1>🐦 Twitter Timeline - Smart Rate Limit Handling</h1>
     
-    <!-- Twitter Timeline Widget -->
-    <div class="w3-container w3-padding-16">
-      <h3>Twitter Timeline</h3>
-      <div id="twitter-widget-main" class="widget-container">
-        <div id="loading-indicator">
-          <div class="loading-spinner"></div>
-          <p>Loading tweets...</p>
-        </div>
-        
-        <!-- Twitter Timeline Container -->
-        <div id="twitter-timeline" class="twitter-timeline" style="display: none;"></div>
-        
-        <!-- Error display area -->
-        <div id="error-display" style="display: none;"></div>
-        
-        <!-- Fallback: Direct link to profile -->
-        <div class="twitter-fallback">
-          <h4>Alternative Options</h4>
-          <p>If the timeline doesn't load:</p>
-          <a href="https://twitter.com/vvsCodedotnet" target="_blank">
-            Visit @vvsCodedotnet on Twitter
-          </a>
-          <a href="https://twitter.com/vvsCodedotnet/with_replies" target="_blank">
-            View Tweets & Replies
-          </a>
-          <a href="https://twitter.com/vvsCodedotnet/media" target="_blank">
-            View Media
-          </a>
-        </div>
+    <!-- Test different accounts section -->
+    <div class="test-accounts">
+      <h3>🧪 Test Different Accounts (Find Available Clients)</h3>
+      <div class="account-buttons">
+        <button onclick="testAccount('vvsCodedotnet')" class="account-btn">Test vvsCodedotnet</button>
+        <button onclick="testAccount('microsoft')" class="account-btn">Test @microsoft</button>
+        <button onclick="testAccount('github')" class="account-btn">Test @github</button>
       </div>
     </div>
-
-    <!-- Back to Main Page -->
-    <div class="w3-container w3-padding-32">
-      <a href="index.html" class="w3-button w3-black w3-padding-large w3-large">
-        ← Back to Main Page
-      </a>
+    
+    <!-- Main timeline section -->
+    <div class="timeline-section">
+      <h3>📱 Main Timeline</h3>
+      <div id="loading-indicator" class="loading-indicator">
+        <div class="spinner"></div>
+        <p>Loading tweets...</p>
+      </div>
+      
+      <div id="error-display" class="error-display" style="display: none;"></div>
+      
+      <div id="twitter-timeline" class="twitter-timeline" style="display: none;"></div>
     </div>
   </div>
 
@@ -448,15 +513,22 @@
     `;
   }
   
-  async function fetchTweets() {
+  async function fetchTweets(account = 'vvsCodedotnet') {
     try {
-      console.log('Fetching tweets from Twitter API...');
+      console.log(`Fetching tweets for account: ${account} from Twitter API...`);
       
-      // Call your working backend API - this serves real tweet data with media
-      const response = await fetch('http://localhost:3000/api/tweets-working/vvsCodedotnet');
+      // Call your smart backend API - automatically handles rate limits and includes media
+      const response = await fetch(`http://localhost:3000/api/tweets-smart/${account}`);
       
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        // Parse the error response to get details
+        const errorData = await response.json();
+        const error = new Error(errorData.error || `HTTP error! status: ${response.status}`);
+        error.status = response.status;
+        error.details = errorData.details;
+        error.waitTimeSeconds = errorData.waitTimeSeconds;
+        error.resetTime = errorData.resetTime;
+        throw error;
       }
       
       const data = await response.json();
@@ -499,33 +571,43 @@
     } catch (error) {
       console.error('Failed to initialize Twitter timeline:', error);
       
-      if (error.status === 429) {
-        showRateLimitError();
+      // Check if it's a rate limit error from the backend
+      if (error.status === 429 || (error.details && error.details.includes('Rate limit'))) {
+        showRateLimitError(error);
       } else {
         showError('Failed to load tweets. Please try again later.', true);
       }
     }
   }
   
-  function showRateLimitError() {
+  function showRateLimitError(error = null) {
     const errorDisplay = document.getElementById('error-display');
     const loadingIndicator = document.getElementById('loading-indicator');
     
     loadingIndicator.style.display = 'none';
     errorDisplay.style.display = 'block';
     
-    // Calculate reset time (15 minutes from now)
-    const resetTime = new Date(Date.now() + 15 * 60 * 1000);
+    let waitTime = 300; // Default 5 minutes
+    let resetTime = new Date(Date.now() + waitTime * 1000);
+    
+    // Use backend countdown info if available
+    if (error && error.waitTimeSeconds) {
+      waitTime = error.waitTimeSeconds;
+      resetTime = new Date(Date.now() + waitTime * 1000);
+    }
+    
+    const minutes = Math.floor(waitTime / 60);
+    const seconds = waitTime % 60;
     
     const errorHTML = `
       <div class="error-message">
         <h4>🚫 Rate Limit Exceeded</h4>
-        <p>Twitter API rate limit reached. New requests will be available at:</p>
+        <p>Twitter API rate limit reached. New requests will be available in:</p>
         <div class="countdown-timer">
           <div class="time-remaining">
-            <span id="countdown-minutes">15</span>m <span id="countdown-seconds">00</span>s
+            <span id="countdown-minutes">${minutes}</span>m <span id="countdown-seconds">${seconds.toString().padStart(2, '0')}</span>s
           </div>
-          <div class="reset-time">${resetTime.toLocaleTimeString()}</div>
+          <div class="reset-time">Resets at: ${resetTime.toLocaleTimeString()}</div>
         </div>
         <button onclick="retryTwitterTimeline()" class="retry-button">Retry When Available</button>
       </div>
@@ -557,11 +639,148 @@
     }, 1000);
   }
   
+  // Start countdown for a specific account
+  function startAccountCountdown(username, resetTime) {
+    const countdownInterval = setInterval(() => {
+      const now = new Date();
+      const timeLeft = resetTime - now;
+      
+      if (timeLeft <= 0) {
+        clearInterval(countdownInterval);
+        const minutesElement = document.getElementById(`countdown-${username}-minutes`);
+        const secondsElement = document.getElementById(`countdown-${username}-seconds`);
+        if (minutesElement && secondsElement) {
+          minutesElement.textContent = '00';
+          secondsElement.textContent = '00';
+        }
+        return;
+      }
+      
+      const minutes = Math.floor(timeLeft / (1000 * 60));
+      const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+      
+      const minutesElement = document.getElementById(`countdown-${username}-minutes`);
+      const secondsElement = document.getElementById(`countdown-${username}-seconds`);
+      if (minutesElement && secondsElement) {
+        minutesElement.textContent = minutes.toString().padStart(2, '0');
+        secondsElement.textContent = seconds.toString().padStart(2, '0');
+      }
+    }, 1000);
+  }
+  
+  // Test different Twitter accounts to find available clients
+  async function testAccount(username) {
+    // Find or create result container for this specific account
+    let resultContainer = document.getElementById(`result-${username}`);
+    if (!resultContainer) {
+      resultContainer = document.createElement('div');
+      resultContainer.id = `result-${username}`;
+      resultContainer.className = 'account-result';
+      
+      // Insert after the button
+      const button = document.querySelector(`button[onclick="testAccount('${username}')"]`);
+      button.parentNode.insertBefore(resultContainer, button.nextSibling);
+    }
+    
+    resultContainer.innerHTML = `<div class="testing">🧪 Testing @${username}...</div>`;
+    
+    try {
+      const response = await fetch(`http://localhost:3000/api/tweets-smart/${username}`);
+      const data = await response.json();
+      
+      if (response.ok) {
+        resultContainer.innerHTML = `
+          <div class="success">
+            ✅ <strong>@${username}</strong> - SUCCESS! 
+            <br>Found ${data.tweets?.data?.length || 0} tweets
+            <br>Client available - you can use this account!
+            <br><button onclick="retryTwitterTimeline('${username}')" class="retry-button">Load Timeline</button>
+          </div>
+        `;
+      } else {
+        // Show rate limit countdown below this specific button
+        const waitTime = data.waitTimeSeconds || 300;
+        const resetTime = new Date(Date.now() + waitTime * 1000);
+        
+        resultContainer.innerHTML = `
+          <div class="error">
+            ❌ <strong>@${username}</strong> - ${data.error}
+            <div class="countdown-timer">
+              <div class="time-remaining">
+                <span id="countdown-${username}-minutes">${Math.floor(waitTime / 60)}</span>m 
+                <span id="countdown-${username}-seconds">${(waitTime % 60).toString().padStart(2, '0')}</span>s
+              </div>
+              <div class="reset-time">Resets at: ${resetTime.toLocaleTimeString()}</div>
+            </div>
+          </div>
+        `;
+        
+        // Start countdown for this specific account
+        startAccountCountdown(username, resetTime);
+      }
+    } catch (error) {
+      resultContainer.innerHTML = `
+        <div class="error">
+          💥 <strong>@${username}</strong> - Network error: ${error.message}
+        </div>
+      `;
+    }
+  }
+
+  // Global variable to store the last working account
+  let lastWorkingAccount = 'vvsCodedotnet';
+  
+  // Retry function that can use a specific account
+  async function retryTwitterTimeline(account = null) {
+    const accountToUse = account || lastWorkingAccount;
+    console.log(`Retrying with account: ${accountToUse}`);
+    
+    // Reset UI
+    const errorDisplay = document.getElementById('error-display');
+    const loadingIndicator = document.getElementById('loading-indicator');
+    const timelineContainer = document.getElementById('twitter-timeline');
+    
+    errorDisplay.style.display = 'none';
+    loadingIndicator.style.display = 'block';
+    timelineContainer.style.display = 'none';
+    
+    try {
+      const data = await fetchTweets(accountToUse);
+      
+      if (data.tweets && data.tweets.data && data.tweets.data.length > 0) {
+        // Hide loading indicator
+        loadingIndicator.style.display = 'none';
+        
+        // Create timeline HTML
+        const timelineHTML = data.tweets.data.map(tweet => createTweetHTML(tweet, data.user, data.includes)).join('');
+        timelineContainer.innerHTML = timelineHTML;
+        
+        // Show timeline
+        timelineContainer.style.display = 'block';
+        
+        console.log('Twitter timeline loaded successfully!');
+        lastWorkingAccount = accountToUse; // Remember this working account
+      } else {
+        showError('No tweets found. Please try again later.', true);
+      }
+      
+    } catch (error) {
+      console.error('Failed to retry Twitter timeline:', error);
+      
+      if (error.status === 429 || (error.details && error.details.includes('Rate limit'))) {
+        showRateLimitError(error);
+      } else {
+        showError('Failed to load tweets. Please try again later.', true);
+      }
+    }
+  }
+
   // Make retry function globally accessible
   window.retryTwitterTimeline = retryTwitterTimeline;
+  window.testAccount = testAccount;
   
-  // Start initialization
-  initializeTwitterTimeline();
+  // Don't auto-load - let user test accounts first
+  // initializeTwitterTimeline();
 })();
 
 // Additional debugging and monitoring
