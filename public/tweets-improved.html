@@ -381,7 +381,43 @@
     return num.toString();
   }
   
-  function createTweetHTML(tweet, user) {
+  function createTweetHTML(tweet, user, includes = {}) {
+    console.log('Creating HTML for tweet:', tweet.id);
+    console.log('Tweet attachments:', tweet.attachments);
+    console.log('Includes media:', includes.media);
+    
+    // Check if tweet has media attachments
+    let mediaHTML = '';
+    if (tweet.attachments && tweet.attachments.media_keys && includes.media) {
+      console.log('Tweet has attachments, processing media...');
+      const mediaKeys = tweet.attachments.media_keys;
+      const mediaItems = includes.media.filter(media => mediaKeys.includes(media.media_key));
+      console.log('Found media items:', mediaItems);
+      
+      if (mediaItems.length > 0) {
+        mediaHTML = mediaItems.map(media => {
+          if (media.type === 'photo') {
+            console.log('Creating photo HTML for:', media.url);
+            return `<div class="tweet-media">
+              <img src="${media.url}" alt="${media.alt_text || 'Tweet image'}" class="tweet-image" loading="lazy">
+            </div>`;
+          } else if (media.type === 'video') {
+            return `<div class="tweet-media">
+              <div class="tweet-video-placeholder">
+                <span class="video-icon">🎥</span>
+                <span class="video-text">Video content</span>
+              </div>
+            </div>`;
+          }
+          return '';
+        }).join('');
+      }
+    } else {
+      console.log('No media attachments found for this tweet');
+    }
+    
+    console.log('Generated media HTML:', mediaHTML);
+    
     return `
       <div class="tweet">
         <div class="tweet-header">
@@ -393,6 +429,7 @@
           </div>
         </div>
         <div class="tweet-content">${tweet.text}</div>
+        ${mediaHTML}
         <div class="tweet-metrics">
           <div class="tweet-metric">
             <svg viewBox="0 0 24 24"><path d="M1.751 10c0-4.42 3.584-8 8.005-8h4.366c4.49 0 8.129 3.64 8.129 8.13 0 2.96-1.607 5.68-4.196 7.23l-.496.281-1.75-1.032L12 17.58l-1.75 1.032-.496-.281c-2.589-1.55-4.196-4.27-4.196-7.23zm8.005-6c-3.317 0-6.005 2.69-6.005 6 0 1.93.977 3.86 2.817 5.03L12 15.476l2.189-1.45c1.835-1.17 2.817-3.1 2.817-5.03 0-3.31-2.689-6-6.005-6z"/></svg>
