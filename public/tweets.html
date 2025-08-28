@@ -47,14 +47,16 @@
     <!-- Primary Twitter Timeline Widget -->
     <div class="w3-container w3-padding-16">
       <h3>Primary Twitter Timeline (450x600)</h3>
-      <a class="twitter-timeline" 
-         data-width="450" 
-         data-height="600" 
-         href="https://twitter.com/vvsCodedotnet?ref_src=twsrc%5Etfw" 
-         data-chrome="noheader nofooter noborders transparent">
-         Tweets by @vvsCodedotnet
-      </a>  
-      <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+      <div id="twitter-widget-1" style="min-height: 600px; border: 1px solid #e1e8ed; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+        <p>Loading Twitter timeline...</p>
+        <a class="twitter-timeline" 
+           data-width="450" 
+           data-height="600" 
+           href="https://twitter.com/vvsCodedotnet" 
+           data-chrome="noheader nofooter noborders transparent">
+           Tweets by @vvsCodedotnet
+        </a>
+      </div>
     </div>
 
     <!-- Alternative Twitter Widget Configurations -->
@@ -64,27 +66,31 @@
       <!-- Configuration 1: Larger Widget -->
       <div class="w3-container w3-padding-16" style="display: inline-block; margin: 10px;">
         <h4>Large Widget (600x800)</h4>
-        <a class="twitter-timeline" 
-           data-width="600" 
-           data-height="800" 
-           href="https://twitter.com/vvsCodedotnet?ref_src=twsrc%5Etfw" 
-           data-chrome="noheader nofooter noborders transparent">
-           Tweets by @vvsCodedotnet
-        </a>  
-        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        <div id="twitter-widget-2" style="min-height: 800px; border: 1px solid #e1e8ed; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+          <p>Loading Twitter timeline...</p>
+          <a class="twitter-timeline" 
+             data-width="600" 
+             data-height="800" 
+             href="https://twitter.com/vvsCodedotnet" 
+             data-chrome="noheader nofooter noborders transparent">
+             Tweets by @vvsCodedotnet
+          </a>
+        </div>
       </div>
 
       <!-- Configuration 2: Compact Widget -->
       <div class="w3-container w3-padding-16" style="display: inline-block; margin: 10px;">
         <h4>Compact Widget (300x400)</h4>
-        <a class="twitter-timeline" 
-           data-width="300" 
-           data-height="400" 
-           href="https://twitter.com/vvsCodedotnet?ref_src=twsrc%5Etfw" 
-           data-chrome="noheader nofooter noborders transparent">
-           Tweets by @vvsCodedotnet
-        </a>  
-        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        <div id="twitter-widget-3" style="min-height: 400px; border: 1px solid #e1e8ed; border-radius: 8px; padding: 20px; background: #f8f9fa;">
+          <p>Loading Twitter timeline...</p>
+          <a class="twitter-timeline" 
+             data-width="300" 
+             data-height="400" 
+             href="https://twitter.com/vvsCodedotnet" 
+             data-chrome="noheader nofooter noborders transparent">
+             Tweets by @vvsCodedotnet
+          </a>
+        </div>
       </div>
     </div>
 
@@ -115,6 +121,54 @@
 <footer class="w3-center w3-black w3-padding-16">
   <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" title="W3.CSS" target="_blank" class="w3-hover-text-green">w3.css</a></p>
 </footer>
+
+<!-- Twitter Widget Script - Load only once -->
+<script>
+// Debug function to check if Twitter widgets are loading
+function checkTwitterWidgets() {
+  console.log('Checking Twitter widgets...');
+  
+  // Check if Twitter widgets are present
+  const widgets = document.querySelectorAll('.twitter-timeline');
+  console.log('Found Twitter timeline elements:', widgets.length);
+  
+  // Check if Twitter script is loaded
+  if (typeof twttr !== 'undefined') {
+    console.log('Twitter script loaded successfully');
+    console.log('Twitter widgets ready:', twttr.widgets.ready);
+  } else {
+    console.log('Twitter script not loaded yet');
+  }
+}
+
+// Check widgets after page loads
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('Page loaded, checking Twitter widgets...');
+  
+  // Load Twitter script
+  const script = document.createElement('script');
+  script.src = 'https://platform.twitter.com/widgets.js';
+  script.charset = 'utf-8';
+  script.async = true;
+  
+  script.onload = function() {
+    console.log('Twitter script loaded');
+    checkTwitterWidgets();
+    
+    // Check again after a delay
+    setTimeout(checkTwitterWidgets, 2000);
+  };
+  
+  script.onerror = function() {
+    console.error('Failed to load Twitter script');
+  };
+  
+  document.head.appendChild(script);
+  
+  // Check widgets after 5 seconds
+  setTimeout(checkTwitterWidgets, 5000);
+});
+</script>
 
 </body>
 </html>
