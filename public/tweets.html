@@ -7,6 +7,72 @@
 <title>Tweets Testing - vvsCode: Flawless Apps</title>
 <link rel="stylesheet" href="w3.css">
 <link rel="icon" href="favicon.ico" />
+<style>
+.twitter-fallback {
+  background: #f8f9fa;
+  border: 1px solid #e1e8ed;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+  text-align: center;
+}
+
+.twitter-fallback h4 {
+  color: #1da1f2;
+  margin-bottom: 15px;
+}
+
+.twitter-fallback a {
+  color: #1da1f2;
+  text-decoration: none;
+  font-weight: bold;
+  padding: 10px 20px;
+  border: 2px solid #1da1f2;
+  border-radius: 25px;
+  display: inline-block;
+  margin: 10px;
+  transition: all 0.3s ease;
+}
+
+.twitter-fallback a:hover {
+  background: #1da1f2;
+  color: white;
+}
+
+.error-message {
+  background: #fff3cd;
+  border: 1px solid #ffeaa7;
+  color: #856404;
+  padding: 15px;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+.loading-spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #1da1f2;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 20px auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.widget-container {
+  min-height: 800px;
+  border: 1px solid #e1e8ed;
+  border-radius: 8px;
+  padding: 20px;
+  background: #f8f9fa;
+  max-width: 650px;
+  margin: auto;
+}
+</style>
 </head>
 
 <body>
@@ -47,24 +113,37 @@
     <!-- Large Twitter Timeline Widget -->
     <div class="w3-container w3-padding-16">
       <h3>Large Twitter Timeline (600x800)</h3>
-      <div id="twitter-widget-main" style="min-height: 800px; border: 1px solid #e1e8ed; border-radius: 8px; padding: 20px; background: #f8f9fa; max-width: 650px; margin: auto;">
-        <p>Loading Twitter timeline...</p>
+      <div id="twitter-widget-main" class="widget-container">
+        <div id="loading-indicator">
+          <div class="loading-spinner"></div>
+          <p>Loading Twitter timeline...</p>
+        </div>
         
         <!-- Twitter Timeline Widget -->
         <a class="twitter-timeline" 
            data-width="600" 
            data-height="800" 
            href="https://twitter.com/vvsCodedotnet" 
-           data-chrome="noheader nofooter noborders transparent">
+           data-chrome="noheader nofooter noborders transparent"
+           style="display: none;">
            Tweets by @vvsCodedotnet
         </a>
         
+        <!-- Error display area -->
+        <div id="error-display" style="display: none;"></div>
+        
         <!-- Fallback: Direct link to profile -->
-        <div style="margin-top: 20px; padding: 20px; background: white; border-radius: 8px; border: 1px solid #e1e8ed;">
-          <h4>If timeline doesn't load:</h4>
-          <p>Visit your Twitter profile directly:</p>
-          <a href="https://twitter.com/vvsCodedotnet" target="_blank" style="color: #1da1f2; text-decoration: none; font-weight: bold;">
-            @vvsCodedotnet on Twitter
+        <div class="twitter-fallback">
+          <h4>Alternative Options</h4>
+          <p>If the timeline doesn't load due to rate limiting:</p>
+          <a href="https://twitter.com/vvsCodedotnet" target="_blank">
+            Visit @vvsCodedotnet on Twitter
+          </a>
+          <a href="https://twitter.com/vvsCodedotnet/with_replies" target="_blank">
+            View Tweets & Replies
+          </a>
+          <a href="https://twitter.com/vvsCodedotnet/media" target="_blank">
+            View Media
           </a>
         </div>
       </div>
@@ -79,6 +158,7 @@
         <li><strong>Responsive Design:</strong> Test on different screen sizes</li>
         <li><strong>Performance:</strong> Monitor page load times with multiple widgets</li>
         <li><strong>Styling:</strong> Verify widget appearance matches site design</li>
+        <li><strong>Error Handling:</strong> Check console for any 429 rate limiting errors</li>
       </ul>
     </div>
 
@@ -100,59 +180,124 @@
 
 <!-- Twitter Widget Script -->
 <script>
-// Load Twitter script and initialize widget
+// Enhanced Twitter widget with better error handling and rate limiting protection
 (function() {
-  console.log('Starting Twitter widget initialization...');
+  console.log('Starting enhanced Twitter widget initialization...');
   
-  // Create and load Twitter script
-  var script = document.createElement('script');
-  script.src = 'https://platform.twitter.com/widgets.js';
-  script.async = true;
-  script.charset = 'utf-8';
+  let retryCount = 0;
+  const maxRetries = 3;
+  const retryDelay = 5000; // 5 seconds
   
-  // When script loads, initialize widget
-  script.onload = function() {
-    console.log('Twitter script loaded successfully');
+  function showError(message, isRetryable = false) {
+    const errorDisplay = document.getElementById('error-display');
+    const loadingIndicator = document.getElementById('loading-indicator');
     
-    // Wait for Twitter to be ready, then load widgets
-    var checkTwitter = setInterval(function() {
-      if (typeof twttr !== 'undefined' && twttr.widgets) {
-        console.log('Twitter API ready, loading widgets...');
-        clearInterval(checkTwitter);
-        
-        // Force widget refresh
-        twttr.widgets.load();
-        
-        // Check if widget loaded after 3 seconds
-        setTimeout(function() {
-          var widget = document.querySelector('.twitter-timeline');
-          if (widget && widget.offsetHeight > 100) {
-            console.log('Widget loaded successfully!');
-            document.querySelector('#twitter-widget-main p').style.display = 'none';
-          } else {
-            console.log('Widget may not have loaded properly');
-            document.querySelector('#twitter-widget-main p').innerHTML = 'Widget loaded but content may be delayed. Please wait a few more seconds...';
+    loadingIndicator.style.display = 'none';
+    errorDisplay.style.display = 'block';
+    
+    let errorHTML = `<div class="error-message">${message}`;
+    
+    if (isRetryable && retryCount < maxRetries) {
+      errorHTML += `<br><button onclick="retryTwitterWidget()" style="margin-top: 10px; padding: 8px 16px; background: #1da1f2; color: white; border: none; border-radius: 4px; cursor: pointer;">Retry (${maxRetries - retryCount} attempts left)</button>`;
+    }
+    
+    errorHTML += '</div>';
+    errorDisplay.innerHTML = errorHTML;
+  }
+  
+  function retryTwitterWidget() {
+    retryCount++;
+    console.log(`Retrying Twitter widget (attempt ${retryCount}/${maxRetries})...`);
+    
+    // Clear previous errors
+    document.getElementById('error-display').style.display = 'none';
+    document.getElementById('loading-indicator').style.display = 'block';
+    
+    // Remove old script and try again
+    const oldScript = document.querySelector('script[src*="platform.twitter.com"]');
+    if (oldScript) {
+      oldScript.remove();
+    }
+    
+    // Wait before retrying
+    setTimeout(initializeTwitterWidget, retryDelay);
+  }
+  
+  function initializeTwitterWidget() {
+    // Create and load Twitter script
+    const script = document.createElement('script');
+    script.src = 'https://platform.twitter.com/widgets.js';
+    script.async = true;
+    script.charset = 'utf-8';
+    
+    // When script loads, initialize widget
+    script.onload = function() {
+      console.log('Twitter script loaded successfully');
+      
+      // Wait for Twitter to be ready, then load widgets
+      const checkTwitter = setInterval(function() {
+        if (typeof twttr !== 'undefined' && twttr.widgets) {
+          console.log('Twitter API ready, loading widgets...');
+          clearInterval(checkTwitter);
+          
+          try {
+            // Force widget refresh
+            twttr.widgets.load();
+            
+            // Check if widget loaded after 5 seconds
+            setTimeout(function() {
+              const widget = document.querySelector('.twitter-timeline');
+              if (widget && widget.offsetHeight > 100) {
+                console.log('Widget loaded successfully!');
+                document.getElementById('loading-indicator').style.display = 'none';
+                widget.style.display = 'block';
+              } else {
+                console.log('Widget may not have loaded properly');
+                showError('Widget loaded but content may be delayed. This could be due to rate limiting.', true);
+              }
+            }, 5000);
+          } catch (error) {
+            console.error('Error loading Twitter widget:', error);
+            showError('Error loading Twitter widget. Please try again later.', true);
           }
-        }, 3000);
+        }
+      }, 100);
+      
+      // Timeout after 10 seconds
+      setTimeout(function() {
+        if (typeof twttr === 'undefined') {
+          console.error('Twitter API failed to load within timeout');
+          showError('Twitter API failed to load. This may be due to rate limiting or network issues.', true);
+        }
+      }, 10000);
+    };
+    
+    // Handle script loading errors
+    script.onerror = function() {
+      console.error('Failed to load Twitter script');
+      if (retryCount < maxRetries) {
+        showError(`Failed to load Twitter script. This may be due to rate limiting (429 error).`, true);
+      } else {
+        showError('Failed to load Twitter timeline after multiple attempts. Please refresh the page later.', false);
       }
-    }, 100);
-  };
+    };
+    
+    // Add script to page
+    document.head.appendChild(script);
+  }
   
-  // Handle script loading errors
-  script.onerror = function() {
-    console.error('Failed to load Twitter script');
-    document.getElementById('twitter-widget-main').innerHTML = '<p style="color: red;">Failed to load Twitter timeline. Please refresh the page.</p>';
-  };
+  // Make retry function globally accessible
+  window.retryTwitterWidget = retryTwitterWidget;
   
-  // Add script to page
-  document.head.appendChild(script);
+  // Start initialization
+  initializeTwitterWidget();
 })();
 
-// Additional debugging
+// Additional debugging and monitoring
 document.addEventListener('DOMContentLoaded', function() {
   console.log('Page loaded, checking for Twitter timeline element...');
   
-  var timelineElement = document.querySelector('.twitter-timeline');
+  const timelineElement = document.querySelector('.twitter-timeline');
   if (timelineElement) {
     console.log('Twitter timeline element found:', timelineElement);
     console.log('Element href:', timelineElement.href);
@@ -160,6 +305,13 @@ document.addEventListener('DOMContentLoaded', function() {
   } else {
     console.error('Twitter timeline element not found');
   }
+  
+  // Monitor for network errors
+  window.addEventListener('error', function(e) {
+    if (e.target && e.target.src && e.target.src.includes('twitter')) {
+      console.error('Twitter resource failed to load:', e.target.src);
+    }
+  }, true);
 });
 </script>
 
