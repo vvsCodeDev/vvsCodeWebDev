@@ -134,6 +134,28 @@
   background: #1991db;
 }
 
+.countdown-timer {
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 15px;
+  margin: 15px 0;
+  text-align: center;
+}
+
+.time-remaining {
+  font-size: 24px;
+  font-weight: bold;
+  color: #dc3545;
+  margin-bottom: 10px;
+}
+
+.reset-time {
+  font-size: 14px;
+  color: #6c757d;
+  font-style: italic;
+}
+
 .widget-container {
   min-height: 800px;
   border: 1px solid #e1e8ed;
@@ -355,36 +377,17 @@
     try {
       console.log('Fetching tweets from Twitter API...');
       
-      // For now, we'll use a mock approach since we need backend API
-      // In production, this would call your backend API endpoint
-      const mockTweets = [
-        {
-          id: '1',
-          text: '🚀 Excited to announce our latest web development project! Building scalable solutions with modern tech stack. #WebDev #Innovation',
-          created_at: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(), // 2 hours ago
-          public_metrics: { like_count: 45, retweet_count: 12, reply_count: 8 }
-        },
-        {
-          id: '2',
-          text: '💡 Pro tip: Always prioritize user experience in your applications. A great UX can make or break your product. #UX #ProductDesign',
-          created_at: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(), // 5 hours ago
-          public_metrics: { like_count: 32, retweet_count: 7, reply_count: 5 }
-        },
-        {
-          id: '3',
-          text: '🔧 Working on some exciting new features for our clients. Stay tuned for updates! #Development #Innovation #Tech',
-          created_at: new Date(Date.now() - 8 * 60 * 60 * 1000).toISOString(), // 8 hours ago
-          public_metrics: { like_count: 28, retweet_count: 6, reply_count: 3 }
-        }
-      ];
+      // Call your mock backend API - this serves real tweet data immediately
+      const response = await fetch('http://localhost:3000/api/tweets-mock/vvsCodedotnet');
       
-      const mockUser = {
-        name: 'vvsCode',
-        username: 'vvsCodedotnet',
-        profile_image_url: '/images/jrc_about.jpg' // Using your existing image
-      };
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       
-      return { user: mockUser, tweets: mockTweets };
+      const data = await response.json();
+      console.log('Twitter API response:', data);
+      
+      return data;
       
     } catch (error) {
       console.error('Error fetching tweets:', error);
@@ -396,15 +399,15 @@
     try {
       const data = await fetchTweets();
       
-      if (data.tweets && data.tweets.length > 0) {
+      if (data.tweets && data.tweets.data && data.tweets.data.length > 0) {
         const timelineContainer = document.getElementById('twitter-timeline');
         const loadingIndicator = document.getElementById('loading-indicator');
         
         // Hide loading indicator
         loadingIndicator.style.display = 'none';
         
-        // Create timeline HTML
-        const timelineHTML = data.tweets.map(tweet => createTweetHTML(tweet, data.user)).join('');
+        // Create timeline HTML - note the nested structure: data.tweets.data
+        const timelineHTML = data.tweets.data.map(tweet => createTweetHTML(tweet, data.user)).join('');
         timelineContainer.innerHTML = timelineHTML;
         
         // Show timeline
@@ -419,11 +422,61 @@
       console.error('Failed to initialize Twitter timeline:', error);
       
       if (error.status === 429) {
-        showError('Rate limit exceeded. Please try again in a few minutes.', true);
+        showRateLimitError();
       } else {
         showError('Failed to load tweets. Please try again later.', true);
       }
     }
+  }
+  
+  function showRateLimitError() {
+    const errorDisplay = document.getElementById('error-display');
+    const loadingIndicator = document.getElementById('loading-indicator');
+    
+    loadingIndicator.style.display = 'none';
+    errorDisplay.style.display = 'block';
+    
+    // Calculate reset time (15 minutes from now)
+    const resetTime = new Date(Date.now() + 15 * 60 * 1000);
+    
+    const errorHTML = `
+      <div class="error-message">
+        <h4>🚫 Rate Limit Exceeded</h4>
+        <p>Twitter API rate limit reached. New requests will be available at:</p>
+        <div class="countdown-timer">
+          <div class="time-remaining">
+            <span id="countdown-minutes">15</span>m <span id="countdown-seconds">00</span>s
+          </div>
+          <div class="reset-time">${resetTime.toLocaleTimeString()}</div>
+        </div>
+        <button onclick="retryTwitterTimeline()" class="retry-button">Retry When Available</button>
+      </div>
+    `;
+    
+    errorDisplay.innerHTML = errorHTML;
+    
+    // Start countdown timer
+    startCountdown(resetTime);
+  }
+  
+  function startCountdown(resetTime) {
+    const countdownInterval = setInterval(() => {
+      const now = new Date();
+      const timeLeft = resetTime - now;
+      
+      if (timeLeft <= 0) {
+        clearInterval(countdownInterval);
+        document.getElementById('countdown-minutes').textContent = '00';
+        document.getElementById('countdown-seconds').textContent = '00';
+        return;
+      }
+      
+      const minutes = Math.floor(timeLeft / (1000 * 60));
+      const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+      
+      document.getElementById('countdown-minutes').textContent = minutes.toString().padStart(2, '0');
+      document.getElementById('countdown-seconds').textContent = seconds.toString().padStart(2, '0');
+    }, 1000);
   }
   
   // Make retry function globally accessible
