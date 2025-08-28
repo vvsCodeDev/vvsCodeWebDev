@@ -415,8 +415,8 @@
     try {
       console.log('Fetching tweets from Twitter API...');
       
-      // Call your mock backend API - this serves real tweet data immediately
-      const response = await fetch('http://localhost:3000/api/tweets-mock/vvsCodedotnet');
+      // Call your working backend API - this serves real tweet data with media
+      const response = await fetch('http://localhost:3000/api/tweets-working/vvsCodedotnet');
       
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -424,6 +424,9 @@
       
       const data = await response.json();
       console.log('Twitter API response:', data);
+      console.log('Tweets data:', data.tweets);
+      console.log('Includes data:', data.includes);
+      console.log('First tweet attachments:', data.tweets?.data?.[0]?.attachments);
       
       return data;
       
