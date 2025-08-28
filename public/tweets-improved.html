@@ -93,6 +93,44 @@
   fill: currentColor;
 }
 
+.tweet-media {
+  margin: 15px 0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.tweet-image {
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.tweet-image:hover {
+  opacity: 0.9;
+}
+
+.tweet-video-placeholder {
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 40px;
+  text-align: center;
+  color: #6c757d;
+}
+
+.video-icon {
+  font-size: 24px;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.video-text {
+  font-size: 14px;
+}
+
 .loading-spinner {
   border: 4px solid #f3f3f3;
   border-top: 4px solid #1da1f2;
@@ -407,7 +445,7 @@
         loadingIndicator.style.display = 'none';
         
         // Create timeline HTML - note the nested structure: data.tweets.data
-        const timelineHTML = data.tweets.data.map(tweet => createTweetHTML(tweet, data.user)).join('');
+        const timelineHTML = data.tweets.data.map(tweet => createTweetHTML(tweet, data.user, data.includes)).join('');
         timelineContainer.innerHTML = timelineHTML;
         
         // Show timeline
