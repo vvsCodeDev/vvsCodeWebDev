@@ -56,6 +56,8 @@ export const contactForm = onRequest(
     const allowedOrigins = [
       'https://vvscodeweb-c0453.web.app',
       'https://vvscodeweb-c0453.firebaseapp.com',
+      'https://vvscode.net',
+      'https://www.vvscode.net',
       'http://localhost:5000',
       'http://localhost:3000',
       'http://127.0.0.1:5000',
