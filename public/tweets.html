@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Tweets Testing - vvsCode: Flawless Apps</title>
+<link rel="stylesheet" href="w3.css">
+<link rel="icon" href="favicon.ico" />
+</head>
+
+<body>
+<!-- Navbar (sit on top) -->
+<div class="w3-top">
+  <div class="w3-bar w3-white w3-wide w3-padding w3-card">
+    <a href="index.html" class="w3-bar-item w3-button"><b>vvsCode</b> Flawless Apps</a>
+    <!-- Float links to the right. Hide them on small screens -->
+    <div class="w3-right w3-hide-small">
+      <a href="index.html#services" class="w3-bar-item w3-button">Services</a>
+      <a href="tweets.html" class="w3-bar-item w3-button w3-black">Tweets</a>
+      <a href="index.html#about" class="w3-bar-item w3-button">About</a>
+      <a href="index.html#contact" class="w3-bar-item w3-button">Contact</a>
+    </div>
+  </div>
+</div>
+
+<!-- Header -->
+<header class="w3-display-container w3-content w3-wide" style="max-width:1500px;" id="home">
+  <img class="w3-image" src="/images/code.jpg" alt="Code" width="1500" height="800">
+  <div class="w3-display-middle w3-margin-top w3-center">
+    <h1 class="w3-xxlarge w3-text-white"><span class="w3-padding w3-black w3-opacity-min"><b>Twitter Timeline Testing</b></span></h1>
+  </div>
+</header>
+
+<!-- Page content -->
+<div class="main-container" style="margin: 0 auto; max-width: 1400px; text-align: center;">
+<div class="w3-center" style="max-width: 1600px;">
+
+  <!-- Tweets Testing Section -->
+  <div class="w3-container w3-padding-32 w3-center" id="tweets" style="text-align:center">
+    <h2 class="w3-border-bottom w3-border-light-grey w3-padding-16">Twitter Timeline Testing</h2>
+    <p style="max-width: 600px; margin: auto; padding-bottom: 20px;">
+      This page is dedicated to testing Twitter timeline functionality before deploying to the main page. 
+      Use this space to experiment with different Twitter widget configurations and styling.
+    </p>
+    
+    <!-- Twitter Timeline Widget -->
+    <div class="w3-container w3-padding-16">
+      <h3>Current Twitter Timeline</h3>
+      <a class="twitter-timeline" 
+         data-width="450" 
+         data-height="600" 
+         href="https://twitter.com/vvsCodedotnet?ref_src=twsrc%5Etfw" 
+         data-chrome="noheader nofooter noborders transparent">
+         Tweets by @vvsCodedotnet
+      </a>  
+      <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+    </div>
+
+    <!-- Alternative Twitter Widget Configurations -->
+    <div class="w3-container w3-padding-16">
+      <h3>Alternative Configurations</h3>
+      
+      <!-- Configuration 1: Larger Widget -->
+      <div class="w3-container w3-padding-16" style="display: inline-block; margin: 10px;">
+        <h4>Large Widget (600x800)</h4>
+        <a class="twitter-timeline" 
+           data-width="600" 
+           data-height="800" 
+           href="https://twitter.com/vvsCodedotnet?ref_src=twsrc%5Etfw" 
+           data-chrome="noheader nofooter noborders transparent">
+           Tweets by @vvsCodedotnet
+        </a>  
+        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+      </div>
+
+      <!-- Configuration 2: Compact Widget -->
+      <div class="w3-container w3-padding-16" style="display: inline-block; margin: 10px;">
+        <h4>Compact Widget (300x400)</h4>
+        <a class="twitter-timeline" 
+           data-width="300" 
+           data-height="400" 
+           href="https://twitter.com/vvsCodedotnet?ref_src=twsrc%5Etfw" 
+           data-chrome="noheader nofooter noborders transparent">
+           Tweets by @vvsCodedotnet
+        </a>  
+        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+      </div>
+    </div>
+
+    <!-- Testing Notes -->
+    <div class="w3-container w3-padding-16" style="max-width: 800px; margin: auto; text-align: left;">
+      <h3>Testing Notes</h3>
+      <ul>
+        <li><strong>Widget Loading:</strong> Check if Twitter widgets load properly</li>
+        <li><strong>Responsive Design:</strong> Test on different screen sizes</li>
+        <li><strong>Performance:</strong> Monitor page load times with multiple widgets</li>
+        <li><strong>Styling:</strong> Verify widget appearance matches site design</li>
+        <li><strong>Content:</strong> Ensure tweets are displaying correctly</li>
+      </ul>
+    </div>
+
+    <!-- Back to Main Page -->
+    <div class="w3-container w3-padding-32">
+      <a href="index.html" class="w3-button w3-black w3-padding-large w3-large">
+        ← Back to Main Page
+      </a>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- Footer -->
+<footer class="w3-center w3-black w3-padding-16">
+  <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" title="W3.CSS" target="_blank" class="w3-hover-text-green">w3.css</a></p>
+</footer>
+
+</body>
+</html>
