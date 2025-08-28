@@ -68,13 +68,24 @@
         <h4>Large Widget (600x800)</h4>
         <div id="twitter-widget-2" style="min-height: 800px; border: 1px solid #e1e8ed; border-radius: 8px; padding: 20px; background: #f8f9fa;">
           <p>Loading Twitter timeline...</p>
+          
+          <!-- Twitter Timeline Widget -->
           <a class="twitter-timeline" 
              data-width="600" 
              data-height="800" 
-             href="https://twitter.com/vvsCodedotnet" 
+             href="https://twitter.com/vvsCodedotnet?ref_src=twsrc%5Etfw" 
              data-chrome="noheader nofooter noborders transparent">
              Tweets by @vvsCodedotnet
           </a>
+          
+          <!-- Fallback: Direct link to profile -->
+          <div style="margin-top: 20px; padding: 20px; background: white; border-radius: 8px; border: 1px solid #e1e8ed;">
+            <h4>If timeline doesn't load:</h4>
+            <p>Visit your Twitter profile directly:</p>
+            <a href="https://twitter.com/vvsCodedotnet" target="_blank" style="color: #1da1f2; text-decoration: none; font-weight: bold;">
+              @vvsCodedotnet on Twitter
+            </a>
+          </div>
         </div>
       </div>
 
@@ -124,49 +135,51 @@
 
 <!-- Twitter Widget Script - Load only once -->
 <script>
-// Debug function to check if Twitter widgets are loading
-function checkTwitterWidgets() {
-  console.log('Checking Twitter widgets...');
-  
-  // Check if Twitter widgets are present
-  const widgets = document.querySelectorAll('.twitter-timeline');
-  console.log('Found Twitter timeline elements:', widgets.length);
-  
-  // Check if Twitter script is loaded
-  if (typeof twttr !== 'undefined') {
-    console.log('Twitter script loaded successfully');
-    console.log('Twitter widgets ready:', twttr.widgets.ready);
-  } else {
-    console.log('Twitter script not loaded yet');
-  }
-}
-
-// Check widgets after page loads
-document.addEventListener('DOMContentLoaded', function() {
-  console.log('Page loaded, checking Twitter widgets...');
-  
-  // Load Twitter script
-  const script = document.createElement('script');
+// Load Twitter script immediately
+(function() {
+  // Create and load Twitter script
+  var script = document.createElement('script');
   script.src = 'https://platform.twitter.com/widgets.js';
-  script.charset = 'utf-8';
   script.async = true;
+  script.charset = 'utf-8';
   
+  // When script loads, initialize widgets
   script.onload = function() {
-    console.log('Twitter script loaded');
-    checkTwitterWidgets();
+    console.log('Twitter script loaded successfully');
     
-    // Check again after a delay
-    setTimeout(checkTwitterWidgets, 2000);
+    // Force widget refresh after a short delay
+    setTimeout(function() {
+      if (typeof twttr !== 'undefined' && twttr.widgets) {
+        console.log('Refreshing Twitter widgets...');
+        twttr.widgets.load();
+      }
+    }, 1000);
   };
   
+  // Handle script loading errors
   script.onerror = function() {
     console.error('Failed to load Twitter script');
+    document.getElementById('twitter-widget-2').innerHTML = '<p style="color: red;">Failed to load Twitter timeline. Please refresh the page.</p>';
   };
   
+  // Add script to page
   document.head.appendChild(script);
+})();
+
+// Additional check after page loads
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('Page loaded, checking for Twitter widgets...');
   
-  // Check widgets after 5 seconds
-  setTimeout(checkTwitterWidgets, 5000);
+  // Check if widgets are present
+  var widgets = document.querySelectorAll('.twitter-timeline');
+  console.log('Found Twitter timeline elements:', widgets.length);
+  
+  // If no widgets found after 3 seconds, show error
+  setTimeout(function() {
+    if (widgets.length === 0) {
+      console.error('No Twitter timeline elements found');
+    }
+  }, 3000);
 });
 </script>
 
