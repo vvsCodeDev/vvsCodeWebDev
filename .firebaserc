@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "vvscodeweb-c0453"
-  }
+    "default": "vvscodeweb-c0453",
+    "vvsCodeWeb": "vvscodeweb-c0453"
+  },
+  "targets": {},
+  "etags": {}
 }

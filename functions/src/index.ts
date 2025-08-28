@@ -12,8 +12,8 @@ import { onRequest } from "firebase-functions/v2/https";
 import { defineSecret } from "firebase-functions/params";
 import { getFirestore } from "firebase-admin/firestore";
 import { initializeApp, getApps } from "firebase-admin/app";
-import fetch from "node-fetch";
 import * as crypto from "crypto";
+import { Resend } from "resend";
 
 // Initialize Firebase Admin if not already initialized
 if (getApps().length === 0) {
@@ -22,8 +22,8 @@ if (getApps().length === 0) {
 
 const db = getFirestore();
 
-// Define secrets for SendGrid configuration
-const sendgridApiKey = defineSecret("SENDGRID_API_KEY");
+// Define secrets for email configuration
+const resendApiKey = defineSecret("RESEND_API_KEY");
 const alertEmailTo = defineSecret("ALERT_EMAIL_TO");
 const alertEmailFrom = defineSecret("ALERT_EMAIL_FROM");
 const ipSalt = defineSecret("IP_SALT");
@@ -48,10 +48,37 @@ interface ContactMessage {
 export const contactForm = onRequest(
   {
     secrets: [ipSalt],
-    cors: true,
+    cors: false,
     region: "us-west1",
   },
   async (req, res) => {
+    // Handle CORS manually - allow multiple origins for development and production
+    const allowedOrigins = [
+      'https://vvscodeweb-c0453.web.app',
+      'https://vvscodeweb-c0453.firebaseapp.com',
+      'http://localhost:5000',
+      'http://localhost:3000',
+      'http://127.0.0.1:5000',
+      'http://127.0.0.1:3000'
+    ];
+    
+    const origin = req.headers.origin;
+    if (origin && allowedOrigins.includes(origin)) {
+      res.set('Access-Control-Allow-Origin', origin);
+    } else {
+      // Fallback to production origin for security
+      res.set('Access-Control-Allow-Origin', 'https://vvscodeweb-c0453.web.app');
+    }
+    
+    res.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.set('Access-Control-Allow-Headers', 'Content-Type');
+    
+    // Handle preflight OPTIONS request
+    if (req.method === 'OPTIONS') {
+      res.status(204).send('');
+      return;
+    }
+    
     // Only allow POST requests
     if (req.method !== "POST") {
       res.status(405).json({ error: "Method not allowed" });
@@ -126,7 +153,7 @@ export const contactForm = onRequest(
 export const onContactMessageCreated = onDocumentCreated(
   {
     document: "contactMessages/{docId}",
-    secrets: [sendgridApiKey, alertEmailTo, alertEmailFrom],
+    secrets: [resendApiKey, alertEmailTo, alertEmailFrom],
     retry: true,
     region: "us-west1",
   },
@@ -139,11 +166,18 @@ export const onContactMessageCreated = onDocumentCreated(
       return;
     }
 
-    // Skip if this was a honeypot hit
-    if (data.honeypotHit) {
-      console.log(`Skipping honeypot hit for document ${docId}`);
-      return;
-    }
+          // Skip if this was a honeypot hit
+      if (data.honeypotHit) {
+        console.log(`Skipping honeypot hit for document ${docId}`);
+        return;
+      }
+      
+      console.log(`Processing contact message for document ${docId}:`, {
+        name: data.name,
+        email: data.email,
+        subject: data.subject,
+        honeypotHit: data.honeypotHit
+      });
 
     try {
       // Prepare email content
@@ -179,40 +213,26 @@ IP Hash: ${data.ipHash}
 <p><em>IP Hash: ${data.ipHash}</em></p>
       `.trim();
 
-      // Send email via SendGrid
-      const response = await fetch("https://api.sendgrid.com/v3/mail/send", {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${sendgridApiKey.value()}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          personalizations: [
-            {
-              to: [{ email: alertEmailTo.value() }],
-            },
-          ],
-          from: { email: alertEmailFrom.value() },
-          subject: subject,
-          content: [
-            {
-              type: "text/plain",
-              value: textContent,
-            },
-            {
-              type: "text/html",
-              value: htmlContent,
-            },
-          ],
-        }),
+      // Send email via Resend
+      console.log(`Attempting to send email via Resend to: ${alertEmailTo.value()}`);
+      console.log(`From email: ${alertEmailFrom.value()}`);
+      
+      const resend = new Resend(resendApiKey.value());
+      
+      const { data: emailData, error } = await resend.emails.send({
+        from: "onboarding@resend.dev", // Use Resend's verified domain
+        to: ["justin@vvscode.net"], // Send to vvscode.net
+        subject: subject,
+        text: textContent,
+        html: htmlContent,
       });
 
-      if (!response.ok) {
-        const errorBody = await response.text();
-        throw new Error(
-          `SendGrid API error: ${response.status} ${response.statusText} - ${errorBody}`
-        );
+      if (error) {
+        console.error(`Resend API error:`, error);
+        throw new Error(`Resend API error: ${error.message}`);
       }
+      
+      console.log('Resend email sent successfully:', emailData);
 
       console.log(`Contact email sent successfully for document ${docId}`);
     } catch (error) {
