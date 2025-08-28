@@ -13,7 +13,7 @@ import { defineSecret } from "firebase-functions/params";
 import { getFirestore } from "firebase-admin/firestore";
 import { initializeApp, getApps } from "firebase-admin/app";
 import * as crypto from "crypto";
-import { Resend } from "resend";
+import sgMail from "@sendgrid/mail";
 
 // Initialize Firebase Admin if not already initialized
 if (getApps().length === 0) {
@@ -23,7 +23,7 @@ if (getApps().length === 0) {
 const db = getFirestore();
 
 // Define secrets for email configuration
-const resendApiKey = defineSecret("RESEND_API_KEY");
+const sendgridApiKey = defineSecret("SENDGRID_API_KEY");
 const alertEmailTo = defineSecret("ALERT_EMAIL_TO");
 const alertEmailFrom = defineSecret("ALERT_EMAIL_FROM");
 const ipSalt = defineSecret("IP_SALT");
@@ -153,7 +153,7 @@ export const contactForm = onRequest(
 export const onContactMessageCreated = onDocumentCreated(
   {
     document: "contactMessages/{docId}",
-    secrets: [resendApiKey, alertEmailTo, alertEmailFrom],
+    secrets: [sendgridApiKey, alertEmailTo, alertEmailFrom],
     retry: true,
     region: "us-west1",
   },
@@ -213,26 +213,27 @@ IP Hash: ${data.ipHash}
 <p><em>IP Hash: ${data.ipHash}</em></p>
       `.trim();
 
-      // Send email via Resend
-      console.log(`Attempting to send email via Resend to: ${alertEmailTo.value()}`);
+      // Send email via SendGrid
+      console.log(`Attempting to send email via SendGrid to: ${alertEmailTo.value()}`);
       console.log(`From email: ${alertEmailFrom.value()}`);
       
-      const resend = new Resend(resendApiKey.value());
+      sgMail.setApiKey(sendgridApiKey.value());
       
-      const { data: emailData, error } = await resend.emails.send({
-        from: "onboarding@resend.dev", // Use Resend's verified domain
-        to: ["justin@vvscode.net"], // Send to vvscode.net
+      const msg = {
+        to: alertEmailTo.value(), // Use configured to email
+        from: alertEmailFrom.value(), // Use configured from email
         subject: subject,
         text: textContent,
         html: htmlContent,
-      });
+      };
 
-      if (error) {
-        console.error(`Resend API error:`, error);
-        throw new Error(`Resend API error: ${error.message}`);
+      try {
+        await sgMail.send(msg);
+        console.log('SendGrid email sent successfully');
+      } catch (error: any) {
+        console.error(`SendGrid API error:`, error);
+        throw new Error(`SendGrid API error: ${error.message || error}`);
       }
-      
-      console.log('Resend email sent successfully:', emailData);
 
       console.log(`Contact email sent successfully for document ${docId}`);
     } catch (error) {
