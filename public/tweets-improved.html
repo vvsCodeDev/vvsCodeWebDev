@@ -214,10 +214,17 @@
 
 .account-buttons {
   display: flex;
-  gap: 10px;
+  gap: 20px;
   justify-content: center;
   flex-wrap: wrap;
   margin: 15px 0;
+}
+
+.account-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 200px;
 }
 
 .account-btn {
@@ -259,6 +266,12 @@
   background: #f8d7da;
   border: 1px solid #f5c6cb;
   color: #721c24;
+}
+
+.ready {
+  background: #d4edda;
+  border: 1px solid #c3e6cb;
+  color: #155724;
 }
 
 .account-result {
@@ -356,9 +369,18 @@
     <div class="test-accounts">
       <h3>🧪 Test Different Accounts (Find Available Clients)</h3>
       <div class="account-buttons">
-        <button onclick="testAccount('vvsCodedotnet')" class="account-btn">Test vvsCodedotnet</button>
-        <button onclick="testAccount('microsoft')" class="account-btn">Test @microsoft</button>
-        <button onclick="testAccount('github')" class="account-btn">Test @github</button>
+        <div class="account-item">
+          <button onclick="testAccount('vvsCodedotnet')" class="account-btn">Test vvsCodedotnet</button>
+          <div id="result-vvsCodedotnet" class="account-result" style="display: none;"></div>
+        </div>
+        <div class="account-item">
+          <button onclick="testAccount('microsoft')" class="account-btn">Test @microsoft</button>
+          <div id="result-microsoft" class="account-result" style="display: none;"></div>
+        </div>
+        <div class="account-item">
+          <button onclick="testAccount('github')" class="account-btn">Test @github</button>
+          <div id="result-github" class="account-result" style="display: none;"></div>
+        </div>
       </div>
     </div>
     
@@ -653,6 +675,17 @@
           minutesElement.textContent = '00';
           secondsElement.textContent = '00';
         }
+        
+        // Update the result container to show it's ready to test again
+        const resultContainer = document.getElementById(`result-${username}`);
+        if (resultContainer) {
+          resultContainer.innerHTML = `
+            <div class="ready">
+              ✅ <strong>@${username}</strong> - Ready to test again!
+              <br><button onclick="testAccount('${username}')" class="retry-button">Test Again</button>
+            </div>
+          `;
+        }
         return;
       }
       
@@ -670,18 +703,15 @@
   
   // Test different Twitter accounts to find available clients
   async function testAccount(username) {
-    // Find or create result container for this specific account
-    let resultContainer = document.getElementById(`result-${username}`);
+    // Find the result container for this specific account
+    const resultContainer = document.getElementById(`result-${username}`);
     if (!resultContainer) {
-      resultContainer = document.createElement('div');
-      resultContainer.id = `result-${username}`;
-      resultContainer.className = 'account-result';
-      
-      // Insert after the button
-      const button = document.querySelector(`button[onclick="testAccount('${username}')"]`);
-      button.parentNode.insertBefore(resultContainer, button.nextSibling);
+      console.error(`Result container not found for ${username}`);
+      return;
     }
     
+    // Show the result container and display testing message
+    resultContainer.style.display = 'block';
     resultContainer.innerHTML = `<div class="testing">🧪 Testing @${username}...</div>`;
     
     try {
@@ -712,6 +742,7 @@
               </div>
               <div class="reset-time">Resets at: ${resetTime.toLocaleTimeString()}</div>
             </div>
+            <br><button onclick="testAccount('${username}')" class="retry-button">Test Again Now</button>
           </div>
         `;
         
